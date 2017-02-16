@@ -5,8 +5,9 @@ const request = require('supertest');
 const {app} = require('./../server');
 const {Todo} = require('./../models/todo');
 
+//每次測試時，都會將db清空
 beforeEach((done) => {
-  Todo.remove({}).then(() => done());         //每次測試時，都會將db清空
+  Todo.remove({}).then(() => done());
 });
 
 describe('POST /todos', () => {
@@ -27,17 +28,18 @@ describe('POST /todos', () => {
 
         // find data from db
         Todo.find().then((todos) => {
-          expect(todos.length).toBe(1);
+          expect(todos.length).toBe(1);         //db內，todos collection內的資料量
           expect(todos[0].text).toBe(text);
           done();
         }).catch((err) => done(err));
       });
   });
 
+  // 當資料不符合規定時，並不會新增資料到資料庫
   it('should not create todo with invalid body data', (done) => {
     request(app)
       .post('/todos')
-      .send({})
+      .send({})                               //送不符合規定的資料
       .expect(400)
       .end((err) => {
         if(err) {
@@ -45,7 +47,7 @@ describe('POST /todos', () => {
         }
 
         Todo.find().then((todos) => {
-          expect(todos.length).toBe(0);
+          expect(todos.length).toBe(0);       //找不到資料
           done();
         }).catch((err) => done(err));
       });
