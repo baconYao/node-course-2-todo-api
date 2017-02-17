@@ -35,4 +35,6 @@ User.findById('58a1280ab4e4e66f2183774d').then((user) => {
   }
 
   console.log(JSON.stringify(user, undefined, 2));
-}, (e) => {console.log(e)}).catch((e) => console.log(e));
+}, (e) => {
+  console.log(e)
+}).catch((e) => console.log(e));
