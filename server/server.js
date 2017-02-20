@@ -85,6 +85,7 @@ app.patch('/todos/:id', (req, res) => {
   }
 
   if(_.isBoolean(body.completed) && body.completed) {
+    // 若completed為true，則completedAt就有產生時間
     body.completedAt = new Date().getTime();
   } else {
     body.completed = false;
