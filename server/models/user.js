@@ -1,3 +1,5 @@
+// mongoose methods vs statics : http://stackoverflow.com/questions/29664499/mongoose-static-methods-vs-instance-methods
+
 const mongoose = require('mongoose');
 const validator = require('validator');
 const jwt = require('jsonwebtoken');      //https://jwt.io/
@@ -51,6 +53,28 @@ UserSchema.methods.generateAuthToken = function() {
   return user.save().then(() => {
     return token;
   });
+};
+
+
+UserSchema.statics.findByToken = function(token) {
+  var User = this;
+  var decode;
+
+  try{
+    decode = jwt.verify(token, 'abc123');
+  } catch (e){
+    // return new Promise((resolve, reject) => {
+    //   reject();
+    // });
+    return Promise.reject();
+  }
+
+  return User.findOne({
+    '_id': decode._id,
+    'tokens.token': token,
+    'tokens.access': 'auth'
+  });
+
 };
 
 
