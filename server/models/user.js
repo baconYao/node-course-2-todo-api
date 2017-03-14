@@ -56,6 +56,18 @@ UserSchema.methods.generateAuthToken = function() {
   });
 };
 
+UserSchema.methods.removeToken = function(token) {
+  var user = this;
+
+  return user.update({
+    $pull: {                //mongodb $pull: https://docs.mongodb.com/manual/reference/operator/update/pull/
+      tokens: {
+        token: token
+      }
+    }
+  });
+};
+
 
 UserSchema.statics.findByToken = function(token) {
   var User = this;

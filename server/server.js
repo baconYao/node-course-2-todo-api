@@ -56,7 +56,7 @@ app.get('/todos/:id', (req, res) => {
 });
 
 app.delete('/todos/:id', (req, res) => {
-  // get th id
+  // get the id
   var id = req.params.id;
   // validate the id -> mot valid? return 404
   if(!ObjectID.isValid(id)) {
@@ -137,6 +137,16 @@ app.post('/users/login', (req, res) => {
       res.header('x-auth', token).send(user);
     });
   }).catch((e) => {
+    res.status(400).send();
+  });
+});
+
+
+// Logout remove token
+app.delete('/users/me/token', authenticate, (req, res) => {
+  req.user.removeToken(req.token).then(() => {
+    res.status(200).send();
+  }, () => {
     res.status(400).send();
   });
 });
